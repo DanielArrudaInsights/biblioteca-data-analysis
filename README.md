@@ -27,7 +27,8 @@ Os resultados das análises SQL oferecem uma visão clara sobre o volume e a efi
 * **Ação/Valor:** Ajuda a medir a eficácia da seleção de leitura.
 
 | total_livros | livros_concluidos | percentual_conclusao |
-| 10 | 3 | 30.0 |   
+| :--- | :--- | :--- |
+| 10 | 3 | 30.0% |
 
 ### 2. Análise de Performance: Tempo Médio de Leitura por Gênero
 
@@ -35,12 +36,13 @@ Os resultados das análises SQL oferecem uma visão clara sobre o volume e a efi
 * **Ação/Valor:** Permite identificar a demanda de tempo para diferentes tipos de conteúdo, auxiliando no planejamento.
 
 | genero | tempo_medio_leitura_dias_arredondado |
-| Classico juvenil | 102 |
-| Cronica brasileira | 110 |
-| Literatura infantojuvenil | 131 |
-| Literatura brasileira | 138 |
-| Literatura americana | 195 |
-| Historia em quadrinhos |285 |
+| :--- | :--- |
+| Classico juvenil | 102 dias |
+| Cronica brasileira | 110 dias |
+| Literatura infantojuvenil | 131 dias |
+| Literatura brasileira | 138 dias |
+| Literatura americana | 195 dias |
+| Historia em quadrinhos | 285 dias |
 
 ---
 
@@ -50,11 +52,12 @@ Os resultados das análises SQL oferecem uma visão clara sobre o volume e a efi
 * **Ação/Valor:** Permite priorizar compras ou iniciar leituras de autores favoritos.
 
 | Nome_do_autor | total_livros_no_acervo | livros_pendentes |
+| :--- | :--- | :--- |
 | Luiz Fernando Verissimo | 2 | 1 |
-| cressida Cowell | 2 | 1 |
+| Cressida Cowell | 2 | 1 |
 | Amy Cuddy | 1 | 0 |
 | Daniel Defoe | 1 | 0 |
-George R. R. Martin | 1 | 0 |
+| George R. R. Martin | 1 | 0 |
 
 ---
 
