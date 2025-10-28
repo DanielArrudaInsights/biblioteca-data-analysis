@@ -1,3 +1,4 @@
+
 # 📚 Pipeline ETL e Análise de Acervo Pessoal (Portfólio de Dados)
 
 ## 🎯 Objetivo do Projeto
@@ -58,6 +59,16 @@ Os resultados das análises SQL oferecem uma visão clara sobre o volume e a efi
 | Amy Cuddy | 1 | 0 |
 | Daniel Defoe | 1 | 0 |
 | George R. R. Martin | 1 | 0 |
+
+---
+
+## 🤖 Uso de Inteligência Artificial no Processo
+
+O desenvolvimento e a documentação deste projeto contaram com o auxílio de uma **Inteligência Artificial (Gemini, Google)** para otimizar os seguintes aspectos:
+
+* **Refinamento de Código e Documentação:** Revisão e ajuste fino de *scripts* SQL e Python para garantir a eficiência e aderência às melhores práticas.
+* **Melhoria na Apresentação:** Estruturação e formatação do `README.md` com foco em valor (KPIs) para o público de gestão e recrutamento.
+* **Consultoria em Versionamento:** Orientação e resolução de erros complexos com Git/GitHub para garantir um *push* e histórico de *commit* limpos e profissionais.
 
 ---
 
