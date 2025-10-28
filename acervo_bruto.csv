@@ -1,0 +1,11 @@
+autor_id, status_id, titulo, genero, data_aquisicao, numero_de_paginas, ISBN, data_de_publicacao, data_inicio_leitura, data_fim_leitura
+1, 3, como treinar o seu dragao, literatura infantojuvenil, 2018/06/17, 221, 978-85-98078-71-7, 2003/02/01, 2019/11/06, 2020/09/25
+1, 1, como partir o coracao de um dragao, literatura infantojuvenil, 2017/08/03, 318, 978-85-8057-235-3, 2019/08/10, 2018/01/19, 2018/02/15
+2, 4, a guerra dos tronos, literatura americana, 2022/03/14, 587, 978-85-441-0425-5, 2015/09/15, 2022/09/07, 2023/03/21
+3, 1, iliada, literatura infantojuvenil, 2025/07/05, 96, 85-262-4586-4=PR, 2002/07/28, 2025/11/07, 2025/12/19
+4, 1, mais comedias para ler na escola, cronica brasileira, 2024/03/13, 148, 978-85-7302-895-9, 2008/04/17, 2024/09/22, 2025/01/10
+4, 3, as mentiras que os homens contam, literatura brasileira, 2024/03/13, 166, 85-7302-338-4, 2000/08/01, 2024/04/09, 2024/08/25
+5, 2, a era dos gladiadores, roma antiga, 2022/05/17, 240, 978-65-86181-39-5, 2020/01/27, 2022/05/23, 2022/07/04
+6, 4, o poder da presença, relacoes humanas, 2019/08/14, 255, 978-85-431-0390-7, 2016/06/21, 2019/10/12, 2019/11/07
+7, 1, sandman, historia em quadrinhos, 2025/03/14, 300, 85-7616-089-7, 2005/05/06, 2025/11/10, 2026/08/22
+8, 3, robinson crusoe, classico juvenil, 2000/03/18, 47, 85-250/1292-0, 1995/01/27, 2015/03/10, 2015/06/20
