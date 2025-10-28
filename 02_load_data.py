@@ -46,16 +46,17 @@ def load_dim_tables(conn):
     ]
 
     cursor = conn.cursor()
-    print("--- 1. VERIFICANDO CADASTROS E GARANTINDO IDs ---")
+    print("--- 1. INSERINDO AUTORES E STATUS PARA GERAR CHAVES ---")
 
     try:
-        # Usando ON CONFLICT para rodar o script sem erros mesmo se os IDs já existirem
+        # Garante que os status e autores base existam antes de carregar Livros.
+        # ON CONFLICT DO NOTHING evita duplicacao no caso de rodar o load_dim_tables mais de uma vez.
         cursor.executemany(
             "INSERT INTO Status_leitores (Nome_do_status) VALUES (%s) ON CONFLICT DO NOTHING;", status_data)
         cursor.executemany(
             "INSERT INTO Autores (Nome_do_autor, Nacionalidade) VALUES (%s, %s) ON CONFLICT DO NOTHING;", autores_data)
         conn.commit()
-        print("✅ Verificacao de IDs concluida.")
+        print("✅ Insercao/Verificacao de IDs concluida.")
     except Exception as e:
         conn.rollback()
         print(f"ERRO ao inserir/verificar IDs: {e}")
@@ -83,7 +84,6 @@ def preprocess_livros_data(file_path):
         df = df.replace({np.nan: None})
 
         # SELEÇÃO: Garante a ordem e apenas as colunas necessárias para o INSERT
-        # A ORDEM AGORA USA OS NOMES CORRIGIDOS (ID_autor, ID_status)
         df_cleaned = df[[
             'ID_autor', 'ID_status', 'titulo', 'ISBN', 'genero',
             'data_de_publicacao', 'data_aquisicao', 'numero_de_paginas',
@@ -110,37 +110,68 @@ def load_data_to_db(conn, data_list):
 
     cursor = conn.cursor()
     print("\n--- 3. CARGA DA TABELA LIVROS ---")
+
+    # A logica de TRUNCATE foi movida para o bloco principal para garantir 
+    # que os IDs dos Autores existam no momento da insercao.
+
     try:
         cursor.executemany(insert_query, data_list)
         conn.commit()
         print(
-            f"  ✅ Carga concluida! {len(data_list)} registros inseridos na tabela Livros.")
+            f"  ✅ Carga concluida! {len(data_list)} registros inseridos na tabela Livros.")
     except Exception as e:
         conn.rollback()
-        print(f"  ❌ ERRO durante a insercao de dados. ROLLBACK executado: {e}")
-        print(f"  Detalhe do Erro: {e}")
+        print(f"  ❌ ERRO durante a insercao de dados. ROLLBACK executado: {e}")
+        print(f"  Detalhe do Erro: {e}")
     finally:
         cursor.close()
 
 
-# --- BLOCO DE EXECUCAO PRINCIPAL ---
+# --- BLOCO DE EXECUCAO PRINCIPAL (ETL ORDENADO) ---
 if __name__ == "__main__":
 
     # 1. FAZER A CONEXAO
     connection = connect_db()
 
     if connection:
-        # 2. FASE 1: GARANTIR QUE OS IDs ESTEJAM NO BANCO
-        load_dim_tables(connection)
+        
+        # --- ETAPA 1: LIMPEZA PARA EVITAR DUPLICAÇÃO ---
+        cursor = connection.cursor()
+        print("\n--- INICIANDO LIMPEZA GERAL DE TABELAS ---")
+        try:
+            # Limpar a tabela Livros (deve ser a primeira por ser dependente)
+            cursor.execute("TRUNCATE TABLE Livros RESTART IDENTITY CASCADE;")
+            
+            # Limpar tabelas dimensionais
+            cursor.execute("TRUNCATE TABLE Autores RESTART IDENTITY CASCADE;")
+            cursor.execute("TRUNCATE TABLE Status_leitores RESTART IDENTITY CASCADE;")
+            
+            connection.commit()
+            print("✅ Limpeza geral concluída (TRUNCATE).")
+        except Exception as e:
+            connection.rollback()
+            print(f"❌ ERRO ao limpar tabelas: {e}")
+            connection.close()
+            # Interrompe o script se a limpeza falhar
+            exit() 
+        finally:
+            cursor.close()
 
-        # 3. FASE 2: PRE-PROCESSAR E CARREGAR OS LIVROS
+
+        # --- ETAPA 2: CARREGAR DIMENSÕES (CRIAÇÃO DE CHAVES ESTRANGEIRAS) ---
+        # Recria os IDs de Autores e Status que acabamos de apagar.
+        load_dim_tables(connection) 
+
+        # --- ETAPA 3: CARREGAR FATO (LIVROS) ---
         CSV_FILE_PATH = 'acervo_bruto.csv'
 
         livros_prontos = preprocess_livros_data(CSV_FILE_PATH)
 
         if livros_prontos:
+            # A carga agora encontra os IDs que foram inseridos na etapa 2.
             load_data_to_db(connection, livros_prontos)
 
         # 4. FECHAR A CONEXAO
         connection.close()
         print("\nProcesso de ETL finalizado. Conexao com o banco de dados encerrada.")
+        
